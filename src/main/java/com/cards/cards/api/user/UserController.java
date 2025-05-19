@@ -2,12 +2,14 @@ package com.cards.cards.api.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cards.cards.models.User;
 import com.cards.cards.services.JwtService;
+import com.cards.cards.services.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -18,15 +20,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @AllArgsConstructor
 public class UserController {
 
+    private UserService userService;
+
     private JwtService jwtService;
 
     @GetMapping("/test")
-    public String test(HttpServletRequest request) {
+    public String test() {
         return jwtService.generateToken();
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
+        userService.saveUser(user);
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 

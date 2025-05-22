@@ -8,15 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class CardsApplicationTests {
 
-	private int value = 1;
-
-	@Test
-	void addition() {
-		assertEquals(2, ++value);
-	}
-
 	@Test
 	void contextLoads() {
 	}
-
 }

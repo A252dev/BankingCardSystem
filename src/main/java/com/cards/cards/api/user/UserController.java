@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cards.cards.models.User;
+import com.cards.cards.models.UserModel;
 import com.cards.cards.services.JwtService;
 import com.cards.cards.services.UserService;
 
@@ -28,13 +28,13 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        userService.saveUser(user);
-        return new ResponseEntity<User>(user, HttpStatus.CREATED);
+    public UserModel register(@RequestBody UserModel user) {
+        return userService.saveUser(user);
+        // return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<String> login(@RequestBody UserModel user) {
         return new ResponseEntity<String>("hi.", HttpStatus.ACCEPTED);
     }
 }

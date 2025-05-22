@@ -5,7 +5,7 @@
 
     <changeSet id="1" author="V1__create_users_table">
         <createTable schemaName="public" tableName="users">
-            <column name="id" type="int">
+            <column name="id" type="serial">
                 <constraints primaryKey="true"/>
             </column>
             <column name="email" type="varchar(255)">

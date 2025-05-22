@@ -26,8 +26,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository _userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    // @Autowired
+    // private PasswordEncoder passwordEncoder;
 
     public UserModel saveUser(UserModel user) {
         return _userRepository.save(user);

@@ -32,8 +32,8 @@ public class UserController {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
 
     @GetMapping("/test")
     public String test() {
@@ -50,11 +50,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserModel user) {
 
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-        );
+        // Authentication authentication = authenticationManager.authenticate(
+        //     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+        // );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // SecurityContextHolder.getContext().setAuthentication(authentication);
         return new ResponseEntity<String>(this.test(), HttpStatus.ACCEPTED);
     }
 

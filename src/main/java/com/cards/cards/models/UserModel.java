@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -33,13 +34,13 @@ public class UserModel implements UserDetails {
     private String role;
 
     // private enum Role {
-    //     USER,
-    //     ADMIN
+    // USER,
+    // ADMIN
     // }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return Collections.singleton(new SimpleGrantedAuthority(this.role.toString()));
     }
 
     @Override

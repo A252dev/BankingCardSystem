@@ -2,6 +2,7 @@ package com.cards.cards.api.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,12 +30,13 @@ public class UserController {
 
     @PostMapping("/register")
     public UserModel register(@RequestBody UserModel user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.saveUser(user);
         // return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserModel user) {
-        return new ResponseEntity<String>("hi.", HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>(this.test(), HttpStatus.ACCEPTED);
     }
 }

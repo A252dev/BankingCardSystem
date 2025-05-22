@@ -40,10 +40,7 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         } else {
-            return new User(
-                    user.getUsername(),
-                    user.getPassword(),
-                    Collections.emptyList());
+            return user;
         }
     }
 }

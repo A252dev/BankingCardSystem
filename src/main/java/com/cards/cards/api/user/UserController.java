@@ -21,7 +21,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @AllArgsConstructor
 public class UserController {
@@ -51,7 +50,7 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody UserModel user) {
 
         // Authentication authentication = authenticationManager.authenticate(
-        //     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+        // new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
         // );
 
         // SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -65,5 +64,5 @@ public class UserController {
 
         return new String(SecurityContextHolder.getContext().getAuthentication().getName());
     }
-    
+
 }

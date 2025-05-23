@@ -24,13 +24,13 @@ public class UserModel implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     // private enum Role {

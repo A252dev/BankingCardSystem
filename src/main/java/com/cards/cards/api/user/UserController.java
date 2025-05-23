@@ -3,9 +3,6 @@ package com.cards.cards.api.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +16,6 @@ import com.cards.cards.services.UserService;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @AllArgsConstructor
@@ -52,9 +48,11 @@ public class UserController {
         // Authentication authentication = authenticationManager.authenticate(
         // new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
         // );
+        return new ResponseEntity<String>(jwtService.verify(user), HttpStatus.ACCEPTED);
 
         // SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<String>(this.test(), HttpStatus.ACCEPTED);
+        // return new ResponseEntity<String>(user.getEmail() + " " + user.getPassword(),
+        // HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/user")

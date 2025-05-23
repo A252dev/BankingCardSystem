@@ -25,7 +25,7 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/register", "/login").permitAll();
+                    authorize.requestMatchers("register", "login").permitAll();
                     authorize.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
@@ -33,15 +33,13 @@ public class SecurityConfig {
                 .build();
     }
 
-    // @Bean
-    // public AuthenticationManager
-    // authenticationManager(AuthenticationConfiguration configuration) throws
-    // Exception {
-    // return configuration.getAuthenticationManager();
-    // }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }

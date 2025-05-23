@@ -11,7 +11,6 @@ import com.cards.cards.models.UserModel;
 @Component
 public class JwtService {
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
 

@@ -44,7 +44,8 @@ public class UserController {
 
         return new ResponseEntity<String>(jwtService.generateToken(user.getUsername()), HttpStatus.ACCEPTED);
 
-        // return new ResponseEntity<String>(jwtService.verify(user), HttpStatus.ACCEPTED);
+        // return new ResponseEntity<String>(jwtService.verify(user),
+        // HttpStatus.ACCEPTED);
 
         // SecurityContextHolder.getContext().setAuthentication(authentication);
         // return new ResponseEntity<String>(user.getEmail() + " " + user.getPassword(),

@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping("/test")
     public String test() {
-        return jwtService.generateToken();
+        return jwtService.generateToken("test@mail.com");
     }
 
     @PostMapping("/register")
@@ -42,7 +42,9 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserModel user) {
 
-        return new ResponseEntity<String>(jwtService.verify(user), HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>(jwtService.generateToken(user.getUsername()), HttpStatus.ACCEPTED);
+
+        // return new ResponseEntity<String>(jwtService.verify(user), HttpStatus.ACCEPTED);
 
         // SecurityContextHolder.getContext().setAuthentication(authentication);
         // return new ResponseEntity<String>(user.getEmail() + " " + user.getPassword(),

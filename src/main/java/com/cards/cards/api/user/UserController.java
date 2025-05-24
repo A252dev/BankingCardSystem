@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping("/test")
     public String test() {
-        return jwtService.generateToken("test@mail.com");
+        return "test.";
     }
 
     @PostMapping("/register")

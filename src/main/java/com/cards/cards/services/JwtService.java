@@ -16,8 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import com.cards.cards.models.UserModel;
 
 import io.jsonwebtoken.Claims;
@@ -29,14 +27,11 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     private String secretKey = "";
-    // private SecretKey sk = null;
 
     public JwtService() {
-
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
-            // this.sk = sk;
             this.secretKey = java.util.Base64.getEncoder().encodeToString(sk.getEncoded());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

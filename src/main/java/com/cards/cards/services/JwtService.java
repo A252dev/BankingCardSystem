@@ -26,13 +26,15 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtService {
 
-    private String secretKey = "";
+    private String secretKey = null;
+    private SecretKey validateKey = null;
 
     public JwtService() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk = keyGen.generateKey();
-            this.secretKey = java.util.Base64.getEncoder().encodeToString(sk.getEncoded());
+            validateKey = sk;
+            secretKey = java.util.Base64.getEncoder().encodeToString(sk.getEncoded());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -65,15 +67,22 @@ public class JwtService {
 
     private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
+        if (claims == null)
+            return null;
         return claimResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith((SecretKey) getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        try {
+            return Jwts.parser()
+                    .verifyWith(validateKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (Exception exception) {
+            System.out.println("Error:" + exception.getMessage());
+            return null;
+        }
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

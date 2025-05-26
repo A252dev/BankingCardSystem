@@ -1,4 +1,4 @@
-package com.cards.cards.api.user;
+package com.cards.cards.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class UserController {
         return "test.";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/user-create")
     public UserModel register(@RequestBody UserModel user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.saveUser(user);

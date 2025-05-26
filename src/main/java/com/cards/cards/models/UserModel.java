@@ -1,5 +1,6 @@
 package com.cards.cards.models;
 
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -17,21 +18,21 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "users")
+@Table(name = "user")
 public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "name_of_birth", nullable = false)
+    private Date date;
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "role", nullable = false)
-    private String role;
 
     // private enum Role {
     // USER,
@@ -40,11 +41,11 @@ public class UserModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(this.role.toString()));
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.name;
     }
 }

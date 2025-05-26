@@ -3,20 +3,63 @@
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="1" author="V1__create_users_table">
-        <createTable schemaName="public" tableName="users">
+    <changeSet id="1" author="V1__create_table">
+
+        <createTable schemaName="public" tableName="user">
             <column name="id" type="serial">
-                <constraints primaryKey="true"/>
+                <constraints primaryKey="true" unique="true" />
             </column>
-            <column name="email" type="varchar(255)">
+            <column name="name" type="varchar(500)">
                 <constraints nullable="false" />
             </column>
-            <column name="password" type="varchar(255)">
+            <column name="date_of_birth" type="date">
                 <constraints nullable="false" />
             </column>
-            <column name="role" type="varchar(255)">
+            <column name="password" type="varchar(500)">
                 <constraints nullable="false" />
             </column>
         </createTable>
+
+        <createTable schemaName="public" tableName="account">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" unique="true"/>
+            </column>
+            <column name="user_id" type="integer">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="balance" type="decimal ">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable schemaName="public" tableName="email_data">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" unique="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(200)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+
+        <createTable schemaName="public" tableName="phone_data">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" unique="true" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="phone" type="varchar(13)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="account" constraintName="fk_account2user" referencedColumnNames="id" referencedTableName="user"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="email_data" constraintName="fk_email2user" referencedColumnNames="id" referencedTableName="user"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="phone_data" constraintName="fk_phone2user" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
 </databaseChangeLog>

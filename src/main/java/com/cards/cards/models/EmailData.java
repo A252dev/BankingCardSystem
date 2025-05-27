@@ -7,10 +7,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
@@ -18,6 +19,7 @@ import lombok.Data;
 public class EmailData {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -26,4 +28,9 @@ public class EmailData {
 
     @Column(name = "email")
     private String email;
+
+    public EmailData(UserModel user_id, String email) {
+        this.user_id = user_id;
+        this.email = email;
+    }
 }

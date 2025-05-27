@@ -39,9 +39,9 @@ public class UserService implements UserDetailsService {
         // UserModel userModel2 = new UserModel(0, "Name", new Date(1900 - 01 - 01), "pass");
         // System.out.println(userModel);
         _userRepository.save(userModel);
-        EmailData emailData = new EmailData();
-        emailData.setUser_id(userModel);
-        emailData.setEmail(user.getEmail());
+        EmailData emailData = new EmailData(userModel, user.getEmail());
+        // emailData.setUser_id(userModel);
+        // emailData.setEmail(user.getEmail());
         _emailRepository.save(emailData);
         return user;
         // emailData.setUser_id(userModel);

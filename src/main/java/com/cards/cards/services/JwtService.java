@@ -29,6 +29,9 @@ public class JwtService {
     private String secretKey = null;
     private SecretKey validateKey = null;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     public JwtService() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
@@ -39,9 +42,6 @@ public class JwtService {
             e.printStackTrace();
         }
     }
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     public String generateToken(String email) {
 

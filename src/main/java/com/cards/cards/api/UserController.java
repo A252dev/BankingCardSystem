@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/user-create")
-    public UserModel register(@RequestBody UserDao user) {
+    public UserModel register(@RequestBody UserModel user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.saveUser(user);
     }

@@ -23,7 +23,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private EmailRepository _emailRepository;
 
-    public UserModel saveUser(UserDao user) {
+    public UserModel saveUser(UserModel user) {
 
         /*
          * {
@@ -38,15 +38,16 @@ public class UserService implements UserDetailsService {
         UserModel userModel = new UserModel(0, user.getName(), user.getDate(), user.getPassword());
         UserModel userModel2 = new UserModel(0, "Name", new Date(1900 - 01 - 01), "pass");
         // System.out.println(userModel);
-        _userRepository.save(userModel2);
-        return userModel2;
-        // EmailData emailData = new EmailData();
+        EmailData emailData = new EmailData();
+        emailData.setUser_id(user);
+        _emailRepository.save(emailData);
+        _userRepository.save(user);
+        return user;
         // emailData.setUser_id(userModel);
         // emailData.setEmail(user.getEmail());
 
         // userModel.setEmail_user(emailData);
 
-        // _emailRepository.save(emailData);
 
         // return userModel;
     }

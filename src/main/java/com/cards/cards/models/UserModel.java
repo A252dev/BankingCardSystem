@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
-@Table(name = "user")
+@Table(name = "users")
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class UserModel implements UserDetails {

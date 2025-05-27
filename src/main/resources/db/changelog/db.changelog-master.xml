@@ -3,9 +3,9 @@
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="1" author="V1__create_table">
+    <changeSet id="1" author="V1__create_tables">
 
-        <createTable schemaName="public" tableName="user">
+        <createTable schemaName="public" tableName="users">
             <column name="id" type="serial">
                 <constraints primaryKey="true" unique="true" />
             </column>
@@ -56,10 +56,10 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="account" constraintName="fk_account2user" referencedColumnNames="id" referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="account" constraintName="fk_account2user" referencedColumnNames="id" referencedTableName="users"/>
 
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="email_data" constraintName="fk_email2user" referencedColumnNames="id" referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="email_data" constraintName="fk_email2user" referencedColumnNames="id" referencedTableName="users"/>
 
-        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="phone_data" constraintName="fk_phone2user" referencedColumnNames="id" referencedTableName="user"/>
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="phone_data" constraintName="fk_phone2user" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

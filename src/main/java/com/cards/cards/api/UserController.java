@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/user-create")
-    public UserModel register(@RequestBody UserModel user) {
+    public UserDao register(@RequestBody UserDao user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.saveUser(user);
     }
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String getUser(@RequestHeader (name = "Authorization") String token) {
+    public String getUser(@RequestHeader(name = "Authorization") String token) {
 
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
 

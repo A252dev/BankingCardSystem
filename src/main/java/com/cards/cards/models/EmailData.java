@@ -18,7 +18,6 @@ import lombok.Data;
 public class EmailData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)

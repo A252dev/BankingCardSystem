@@ -60,9 +60,9 @@ public class UserModel implements UserDetails {
         return this.name;
     }
 
-    // public UserModel(String name, Date date, String password) {
-    //     this.name = name;
-    //     this.date = date;
-    //     this.password = password;
-    // }
+    public UserModel(String name, Date date, String password) {
+        this.name = name;
+        this.date = date;
+        this.password = password;
+    }
 }

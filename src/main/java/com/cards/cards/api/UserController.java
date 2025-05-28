@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cards.cards.dao.DeleteUserDao;
 import com.cards.cards.dao.UserDao;
 import com.cards.cards.models.UserModel;
 import com.cards.cards.services.JwtService;
@@ -17,6 +18,7 @@ import com.cards.cards.services.UserService;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
@@ -37,7 +39,12 @@ public class UserController {
     @PostMapping("/user-create")
     public UserDao register(@RequestBody UserDao user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        return userService.saveUser(user);
+        return userService.createUser(user);
+    }
+
+    @DeleteMapping("/user-delete")
+    public String delete(@RequestBody DeleteUserDao user) {
+        return userService.deleteUser(user);
     }
 
     @PostMapping("/login")

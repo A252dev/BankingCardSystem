@@ -2,8 +2,6 @@ package com.cards.cards.dao;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

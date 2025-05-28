@@ -7,5 +7,5 @@ import com.cards.cards.models.UserModel;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserModel, Integer> {
-    UserModel findByName(String name);
+    UserModel findFirstByName(String name);
 }

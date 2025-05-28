@@ -1,12 +1,16 @@
 package com.cards.cards.services;
 
 import java.sql.Date;
+import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cards.cards.dao.UserDao;
 import com.cards.cards.models.EmailData;
@@ -23,6 +27,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private EmailRepository _emailRepository;
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public UserDao saveUser(UserDao user) {
 
         /*
@@ -35,27 +40,14 @@ public class UserService implements UserDetailsService {
          * }
          */
 
-        UserModel userModel = new UserModel(user.getName(), user.getDate(), user.getPassword());
-        // UserModel userModel2 = new UserModel(0, "Name", new Date(1900 - 01 - 01), "pass");
-        // System.out.println(userModel);
-        _userRepository.save(userModel);
-        EmailData emailData = new EmailData(userModel, user.getEmail());
-        // emailData.setUser_id(userModel);
-        // emailData.setEmail(user.getEmail());
-        _emailRepository.save(emailData);
+        UserModel newUser = new UserModel(user.getName(), user.getDate(), user.getPassword());
+        _userRepository.save(newUser);
+        _emailRepository.save(new EmailData(newUser, user.getEmail()));
         return user;
-        // emailData.setUser_id(userModel);
-        // emailData.setEmail(user.getEmail());
-
-        // userModel.setEmail_user(emailData);
-
-
-        // return userModel;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
         UserModel user = _userRepository.findByName(email);
         if (user == null) {
             throw new UsernameNotFoundException(email);

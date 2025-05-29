@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cards.cards.dao.DeleteUserDao;
 import com.cards.cards.dao.UserDao;
 import com.cards.cards.services.UserService;
 
@@ -38,15 +37,14 @@ public class UserController {
     }
 
     @DeleteMapping("/user-delete")
-    public ResponseEntity<String> delete(@RequestBody DeleteUserDao user) {
-        return userService.deleteUser(user);
+    public ResponseEntity<String> delete() {
+        return userService.deleteUser();
     }
 
     @GetMapping("/user")
     public String getUser(@RequestHeader(name = "Authorization") String token) {
 
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
-
         return new String("hi. " + user);
     }
 }

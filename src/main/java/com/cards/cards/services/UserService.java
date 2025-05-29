@@ -1,27 +1,18 @@
 package com.cards.cards.services;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
-
-import com.cards.cards.dao.DeleteUserDao;
 import com.cards.cards.dao.UserDao;
 import com.cards.cards.models.EmailData;
 import com.cards.cards.models.UserModel;
@@ -64,11 +55,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> deleteUser(DeleteUserDao user) {
-        UserModel deleteUserId = _userRepository.findFirstByName(user.getName());
-        if (deleteUserId != null) {
-            _emailRepository.deleteAll(_emailRepository.findByUserId(deleteUserId));
-            _userRepository.delete(deleteUserId);
+    public ResponseEntity<String> deleteUser() {
+        Optional<UserModel> deleteUserId = _userRepository
+                .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
+        if (deleteUserId.isPresent()) {
+            _emailRepository.deleteAll(_emailRepository.findByUserId(deleteUserId.get()));
+            _userRepository.delete(deleteUserId.get());
             return new ResponseEntity<String>("User has deleted.", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("User not found!", HttpStatus.NOT_FOUND);
@@ -77,10 +69,12 @@ public class UserService implements UserDetailsService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> updateUser(UserDao user) {
-        Optional<UserModel> updateUser = _userRepository.findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
+        Optional<UserModel> updateUser = _userRepository
+                .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
         if (updateUser.isPresent()) {
             _emailRepository.updateUser(updateUser.get(), user.getEmail());
-            _userRepository.save(new UserModel(updateUser.get().getId(), user.getName(), user.getDate(), passwordEncoder.encode(user.getPassword())));
+            _userRepository.save(new UserModel(updateUser.get().getId(), user.getName(), user.getDate(),
+                    passwordEncoder.encode(user.getPassword())));
             return new ResponseEntity<String>("User has updated.", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("User not found!", HttpStatus.NOT_FOUND);

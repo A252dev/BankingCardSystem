@@ -45,7 +45,7 @@ public class UserModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.name;
+        return Integer.toString(this.id);
     }
 
     public UserModel(String name, Date date, String password) {

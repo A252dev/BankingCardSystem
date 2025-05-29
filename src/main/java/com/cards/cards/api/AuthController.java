@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cards.cards.models.UserModel;
+import com.cards.cards.dao.LoginUserDao;
 import com.cards.cards.services.JwtService;
 
 @RestController
@@ -17,7 +17,10 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserModel user) {
-        return new ResponseEntity<String>(jwtService.generateToken(user.getUsername()), HttpStatus.OK);
+    public ResponseEntity<String> login(@RequestBody LoginUserDao user) {
+        String jwtToken = jwtService.generateToken(user.getEmail(), user.getPassword());
+        if (jwtToken != null)
+            return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
+        return new ResponseEntity<String>("Data is incorrect!", HttpStatus.NOT_FOUND);
     }
 }

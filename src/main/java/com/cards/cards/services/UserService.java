@@ -84,11 +84,19 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        UserModel user = _userRepository.findFirstByName(name);
-        if (user == null) {
+        Optional<UserModel> user = _userRepository.findById(Integer.parseInt(name));
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("User " + name + " not found");
         } else {
-            return user;
+            return user.get();
         }
+    }
+
+    public EmailData getUserEmailFromDatabase(String email) {
+        return _emailRepository.findByEmail(email);
+    }
+
+    public Optional<UserModel> getUserDataFromDatabase(UserModel model) {
+        return _userRepository.findById(model.getId());
     }
 }

@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.crypto.KeyGenerator;
@@ -15,7 +16,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.cards.cards.models.EmailData;
 import com.cards.cards.models.UserModel;
 
 import io.jsonwebtoken.Claims;
@@ -32,6 +36,12 @@ public class JwtService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public JwtService() {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
@@ -43,17 +53,23 @@ public class JwtService {
         }
     }
 
-    public String generateToken(String name) {
+    public String generateToken(String email, String password) {
+        EmailData findUser = userService.getUserEmailFromDatabase(email);
+        if (findUser != null && userService.getUserDataFromDatabase(findUser.getUser_id()).isPresent()
+                && passwordEncoder.matches(password,
+                        userService.getUserDataFromDatabase(findUser.getUser_id()).get().getPassword())) {
+            Map<String, Object> claims = new HashMap<>();
 
-        Map<String, Object> claims = new HashMap<>();
-
-        return Jwts.builder()
-                .claims(claims)
-                .subject(name)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 24))
-                .signWith(getKey())
-                .compact();
+            return Jwts.builder()
+                    .claims(claims)
+                    .subject(findUser.getUser_id().getId().toString())
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 24))
+                    .signWith(getKey())
+                    .compact();
+        } else {
+            return null;
+        }
     }
 
     private Key getKey() {

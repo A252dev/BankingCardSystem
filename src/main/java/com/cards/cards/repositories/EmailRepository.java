@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface EmailRepository extends JpaRepository<EmailData, Integer> {
+
     EmailData findByEmail(String email);
 
     @Query("SELECT e FROM EmailData e WHERE e.user_id = :user_id")

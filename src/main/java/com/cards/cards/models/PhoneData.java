@@ -31,4 +31,9 @@ public class PhoneData {
 
     @Column(name = "phone")
     private String phone;
+
+    public PhoneData(UserModel user_id, String phone) {
+        this.user_id = user_id;
+        this.phone = phone;
+    }
 }

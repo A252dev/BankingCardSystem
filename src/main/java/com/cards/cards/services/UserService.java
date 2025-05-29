@@ -15,12 +15,17 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.cards.cards.dao.UserDao;
 import com.cards.cards.models.EmailData;
+import com.cards.cards.models.PhoneData;
 import com.cards.cards.models.UserModel;
 import com.cards.cards.repositories.EmailRepository;
+import com.cards.cards.repositories.PhoneRepository;
 import com.cards.cards.repositories.UserRepository;
 
 @Service
 public class UserService implements UserDetailsService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository _userRepository;
@@ -29,7 +34,7 @@ public class UserService implements UserDetailsService {
     private EmailRepository _emailRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PhoneRepository _phoneRepository;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> createUser(UserDao user) {
@@ -50,6 +55,7 @@ public class UserService implements UserDetailsService {
         } else {
             _userRepository.save(newUser);
             _emailRepository.save(new EmailData(newUser, user.getEmail()));
+            _phoneRepository.save(new PhoneData(newUser, user.getPhone()));
             return new ResponseEntity<String>("User has created.", HttpStatus.OK);
         }
     }

@@ -43,13 +43,13 @@ public class JwtService {
         }
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String name) {
 
         Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(email)
+                .subject(name)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 24))
                 .signWith(getKey())
@@ -61,7 +61,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractEmail(String token) {
+    public String extractName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -86,8 +86,8 @@ public class JwtService {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String email = extractEmail(token);
-        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String name = extractName(token);
+        return (name.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {

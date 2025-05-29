@@ -1,19 +1,17 @@
 package com.cards.cards.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cards.cards.dao.DeleteUserDao;
 import com.cards.cards.dao.UserDao;
-import com.cards.cards.models.UserModel;
-import com.cards.cards.services.JwtService;
 import com.cards.cards.services.UserService;
 
 import lombok.AllArgsConstructor;
@@ -28,28 +26,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtService jwtService;
-
-    @GetMapping("/test")
-    public String test() {
-        return "test.";
-    }
-
     @PostMapping("/user-create")
-    public UserDao register(@RequestBody UserDao user) {
+    public ResponseEntity<String> register(@RequestBody UserDao user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.createUser(user);
     }
 
-    @DeleteMapping("/user-delete")
-    public String delete(@RequestBody DeleteUserDao user) {
-        return userService.deleteUser(user);
+    @PutMapping("/user-update")
+    public ResponseEntity<String> update(@RequestBody UserDao user) {
+        return userService.updateUser(user);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserModel user) {
-        return new ResponseEntity<String>(jwtService.generateToken(user.getUsername()), HttpStatus.CREATED);
+    @DeleteMapping("/user-delete")
+    public ResponseEntity<String> delete(@RequestBody DeleteUserDao user) {
+        return userService.deleteUser(user);
     }
 
     @GetMapping("/user")

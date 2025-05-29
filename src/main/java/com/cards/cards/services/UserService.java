@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,6 +36,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private EmailRepository _emailRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> createUser(UserDao user) {
@@ -72,10 +77,10 @@ public class UserService implements UserDetailsService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> updateUser(UserDao user) {
-        UserModel updateUser = _userRepository.findFirstByName(user.getName());
-        if (updateUser != null) {
-            _emailRepository.updateUser(updateUser, user.getEmail());
-            _userRepository.save(new UserModel(updateUser.getId(), user.getName(), user.getDate(), user.getPassword()));
+        Optional<UserModel> updateUser = _userRepository.findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
+        if (updateUser.isPresent()) {
+            _emailRepository.updateUser(updateUser.get(), user.getEmail());
+            _userRepository.save(new UserModel(updateUser.get().getId(), user.getName(), user.getDate(), passwordEncoder.encode(user.getPassword())));
             return new ResponseEntity<String>("User has updated.", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("User not found!", HttpStatus.NOT_FOUND);

@@ -47,6 +47,6 @@ public class UserController {
 
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return new String("hi.");
+        return new String("hi. " + user);
     }
 }

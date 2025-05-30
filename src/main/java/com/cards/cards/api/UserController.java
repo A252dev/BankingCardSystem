@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cards.cards.dao.UserDao;
+import com.cards.cards.dao.UserDTO;
 import com.cards.cards.services.UserService;
 
 import lombok.AllArgsConstructor;
@@ -26,13 +26,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user-create")
-    public ResponseEntity<String> register(@RequestBody UserDao user) {
+    public ResponseEntity<String> register(@RequestBody UserDTO user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.createUser(user);
     }
 
     @PutMapping("/user-update")
-    public ResponseEntity<String> update(@RequestBody UserDao user) {
+    public ResponseEntity<String> update(@RequestBody UserDTO user) {
         return userService.updateUser(user);
     }
 

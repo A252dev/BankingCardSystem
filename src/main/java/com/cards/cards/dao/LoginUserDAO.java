@@ -3,7 +3,7 @@ package com.cards.cards.dao;
 import lombok.Data;
 
 @Data
-public class LoginUserDao {
+public class LoginUserDAO {
     private String email;
     private String password;
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 import lombok.Data;
 
 @Data
-public class UserDao {
+public class UserDTO {
     private String name;
     private String password;
     private Date date;

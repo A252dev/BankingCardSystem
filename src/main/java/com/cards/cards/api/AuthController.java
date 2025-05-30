@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cards.cards.dao.LoginUserDao;
+import com.cards.cards.dao.LoginUserDAO;
 import com.cards.cards.services.JwtService;
 
 @RestController
@@ -17,7 +17,7 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginUserDao user) {
+    public ResponseEntity<String> login(@RequestBody LoginUserDAO user) {
         String jwtToken = jwtService.generateToken(user.getEmail(), user.getPassword());
         if (jwtToken != null)
             return new ResponseEntity<String>(jwtToken, HttpStatus.OK);

@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import com.cards.cards.dao.UserDao;
+import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.EmailData;
 import com.cards.cards.models.PhoneData;
 import com.cards.cards.models.UserModel;
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
     private PhoneRepository _phoneRepository;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> createUser(UserDao user) {
+    public ResponseEntity<String> createUser(UserDTO user) {
 
         /*
          * {
@@ -65,6 +65,7 @@ public class UserService implements UserDetailsService {
         Optional<UserModel> deleteUserId = _userRepository
                 .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
         if (deleteUserId.isPresent()) {
+            _phoneRepository.deleteByUserId(deleteUserId.get());
             _emailRepository.deleteAll(_emailRepository.findByUserId(deleteUserId.get()));
             _userRepository.delete(deleteUserId.get());
             return new ResponseEntity<String>("User has deleted.", HttpStatus.OK);
@@ -74,7 +75,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> updateUser(UserDao user) {
+    public ResponseEntity<String> updateUser(UserDTO user) {
         Optional<UserModel> updateUser = _userRepository
                 .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
         if (updateUser.isPresent()) {

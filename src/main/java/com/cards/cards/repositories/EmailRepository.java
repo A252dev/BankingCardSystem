@@ -16,10 +16,10 @@ public interface EmailRepository extends JpaRepository<EmailModel, Integer> {
 
     EmailModel findByEmail(String email);
 
-    @Query("SELECT e FROM EmailData e WHERE e.user_id = :user_id")
+    @Query("SELECT e FROM EmailData e WHERE e.user_id = ?1")
     List<EmailModel> findByUserId(@Param("user_id") UserModel user_id);
 
     @Modifying
-    @Query("UPDATE EmailData e SET e.email = :email WHERE e.user_id = :user_id")
+    @Query("UPDATE EmailData e SET e.email = ?2 WHERE e.user_id = ?1")
     void updateUser(@Param("user_id") UserModel user_id, @Param("email") String email);
 }

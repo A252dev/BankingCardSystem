@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 import javax.crypto.KeyGenerator;
@@ -20,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.cards.cards.dao.LoginUserDAO;
-import com.cards.cards.models.EmailModel;
-import com.cards.cards.models.PhoneModel;
 import com.cards.cards.models.UserModel;
 
 import io.jsonwebtoken.Claims;
@@ -35,8 +32,8 @@ public class JwtService {
     private String secretKey = null;
     private SecretKey validateKey = null;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    // @Autowired
+    // private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserService userService;
@@ -115,15 +112,15 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-    public String verify(UserModel user) {
+    // public String verify(UserModel user) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    //     Authentication authentication = authenticationManager.authenticate(
+    //             new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-        if (authentication.isAuthenticated()) {
-            return "Success";
-        } else {
-            return "fail";
-        }
-    }
+    //     if (authentication.isAuthenticated()) {
+    //         return "Success";
+    //     } else {
+    //         return "fail";
+    //     }
+    // }
 }

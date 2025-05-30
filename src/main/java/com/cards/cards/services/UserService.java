@@ -21,9 +21,6 @@ import com.cards.cards.repositories.EmailRepository;
 import com.cards.cards.repositories.PhoneRepository;
 import com.cards.cards.repositories.UserRepository;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
 @Service
 public class UserService implements UserDetailsService {
 

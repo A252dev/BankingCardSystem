@@ -20,6 +20,6 @@ public interface EmailRepository extends JpaRepository<EmailModel, Integer> {
     List<EmailModel> findByUserId(@Param("user_id") UserModel user_id);
 
     @Modifying
-    @Query("UPDATE EmailData e SET e.user_id = :user_id, e.email = :email WHERE e.user_id = :user_id")
+    @Query("UPDATE EmailData e SET e.email = :email WHERE e.user_id = :user_id")
     void updateUser(@Param("user_id") UserModel user_id, @Param("email") String email);
 }

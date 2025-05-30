@@ -18,7 +18,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginUserDAO user) {
-        String jwtToken = jwtService.generateToken(user.getEmail(), user.getPassword());
+        String jwtToken = jwtService.generateToken(user);
         if (jwtToken != null)
             return new ResponseEntity<String>(jwtToken, HttpStatus.OK);
         return new ResponseEntity<String>("Data is incorrect!", HttpStatus.NOT_FOUND);

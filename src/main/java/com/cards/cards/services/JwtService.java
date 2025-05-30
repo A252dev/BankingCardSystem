@@ -19,7 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.cards.cards.dao.LoginUserDAO;
 import com.cards.cards.models.EmailModel;
+import com.cards.cards.models.PhoneModel;
 import com.cards.cards.models.UserModel;
 
 import io.jsonwebtoken.Claims;
@@ -53,16 +55,19 @@ public class JwtService {
         }
     }
 
-    public String generateToken(String email, String password) {
-        EmailModel findUser = userService.getUserEmailFromDatabase(email);
-        if (findUser != null && userService.getUserDataFromDatabase(findUser.getUser_id()).isPresent()
-                && passwordEncoder.matches(password,
-                        userService.getUserDataFromDatabase(findUser.getUser_id()).get().getPassword())) {
+    public String generateToken(LoginUserDAO user) {
+        UserModel findUser;
+        if (user.getEmail().isPresent())
+            findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).getUser_id();
+        findUser = userService.getUserEmailByPhone(user.getPhone().get()).getUser_id();
+        if (findUser != null
+                && passwordEncoder.matches(user.getPassword(),
+                        findUser.getPassword())) {
             Map<String, Object> claims = new HashMap<>();
 
             return Jwts.builder()
                     .claims(claims)
-                    .subject(findUser.getUser_id().getId().toString())
+                    .subject(findUser.getId().toString())
                     .issuedAt(new Date(System.currentTimeMillis()))
                     .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 24))
                     .signWith(getKey())

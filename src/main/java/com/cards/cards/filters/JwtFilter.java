@@ -1,4 +1,4 @@
-package com.cards.cards.config;
+package com.cards.cards.filters;
 
 import java.io.IOException;
 

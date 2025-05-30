@@ -21,6 +21,9 @@ import com.cards.cards.repositories.EmailRepository;
 import com.cards.cards.repositories.PhoneRepository;
 import com.cards.cards.repositories.UserRepository;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -102,7 +105,11 @@ public class UserService implements UserDetailsService {
         return _emailRepository.findByEmail(email);
     }
 
-    public Optional<UserModel> getUserDataFromDatabase(UserModel model) {
-        return _userRepository.findById(model.getId());
+    public PhoneModel getUserEmailByPhone(String phone) {
+        return _phoneRepository.findByPhone(phone);
     }
+
+    // public Optional<UserModel> getUserDataFromDatabase(UserModel model) {
+    // return _userRepository.findById(model.getId());
+    // }
 }

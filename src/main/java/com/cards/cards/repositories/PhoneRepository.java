@@ -14,4 +14,6 @@ public interface PhoneRepository extends JpaRepository<PhoneModel, Integer> {
     @Modifying
     @Query("DELETE FROM PhoneData p WHERE p.user_id = :user_id")
     void deleteByUserId(@Param("user_id") UserModel user_id);
+
+    PhoneModel findByPhone(String phone);
 }

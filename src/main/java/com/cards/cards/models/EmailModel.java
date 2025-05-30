@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "email_data")
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class EmailData {
+public class EmailModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class EmailData {
     @Column(name = "email")
     private String email;
 
-    public EmailData(UserModel user_id, String email) {
+    public EmailModel(UserModel user_id, String email) {
         this.user_id = user_id;
         this.email = email;
     }

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.cards.cards.dao.UserDTO;
-import com.cards.cards.models.EmailData;
-import com.cards.cards.models.PhoneData;
+import com.cards.cards.models.EmailModel;
+import com.cards.cards.models.PhoneModel;
 import com.cards.cards.models.UserModel;
 import com.cards.cards.repositories.EmailRepository;
 import com.cards.cards.repositories.PhoneRepository;
@@ -54,8 +54,8 @@ public class UserService implements UserDetailsService {
             return new ResponseEntity<String>("The user exists!", HttpStatus.BAD_REQUEST);
         } else {
             _userRepository.save(newUser);
-            _emailRepository.save(new EmailData(newUser, user.getEmail()));
-            _phoneRepository.save(new PhoneData(newUser, user.getPhone()));
+            _emailRepository.save(new EmailModel(newUser, user.getEmail()));
+            _phoneRepository.save(new PhoneModel(newUser, user.getPhone()));
             return new ResponseEntity<String>("User has created.", HttpStatus.OK);
         }
     }
@@ -98,7 +98,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public EmailData getUserEmailFromDatabase(String email) {
+    public EmailModel getUserEmailFromDatabase(String email) {
         return _emailRepository.findByEmail(email);
     }
 

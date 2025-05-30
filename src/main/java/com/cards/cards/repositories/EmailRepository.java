@@ -6,18 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.cards.cards.models.EmailData;
+import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.UserModel;
 
 import java.util.List;
 
 @Repository
-public interface EmailRepository extends JpaRepository<EmailData, Integer> {
+public interface EmailRepository extends JpaRepository<EmailModel, Integer> {
 
-    EmailData findByEmail(String email);
+    EmailModel findByEmail(String email);
 
     @Query("SELECT e FROM EmailData e WHERE e.user_id = :user_id")
-    List<EmailData> findByUserId(@Param("user_id") UserModel user_id);
+    List<EmailModel> findByUserId(@Param("user_id") UserModel user_id);
 
     @Modifying
     @Query("UPDATE EmailData e SET e.user_id = :user_id, e.email = :email WHERE e.user_id = :user_id")

@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "phone_data")
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class PhoneData {
+public class PhoneModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class PhoneData {
     @Column(name = "phone")
     private String phone;
 
-    public PhoneData(UserModel user_id, String phone) {
+    public PhoneModel(UserModel user_id, String phone) {
         this.user_id = user_id;
         this.phone = phone;
     }

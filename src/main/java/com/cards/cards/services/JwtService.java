@@ -19,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.cards.cards.models.EmailData;
+import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.UserModel;
 
 import io.jsonwebtoken.Claims;
@@ -54,7 +54,7 @@ public class JwtService {
     }
 
     public String generateToken(String email, String password) {
-        EmailData findUser = userService.getUserEmailFromDatabase(email);
+        EmailModel findUser = userService.getUserEmailFromDatabase(email);
         if (findUser != null && userService.getUserDataFromDatabase(findUser.getUser_id()).isPresent()
                 && passwordEncoder.matches(password,
                         userService.getUserDataFromDatabase(findUser.getUser_id()).get().getPassword())) {

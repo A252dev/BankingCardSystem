@@ -31,6 +31,7 @@ public class AccountModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserModel user_id;
 
+    @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
 }

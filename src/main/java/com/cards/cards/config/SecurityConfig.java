@@ -21,7 +21,6 @@ import com.cards.cards.filters.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableJpaRepositories
 public class SecurityConfig {
 
     @Autowired

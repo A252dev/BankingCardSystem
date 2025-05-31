@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.PhoneModel;
@@ -21,20 +22,23 @@ import com.cards.cards.repositories.EmailRepository;
 import com.cards.cards.repositories.PhoneRepository;
 import com.cards.cards.repositories.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository _userRepository;
+    // @Autowired
+    private final UserRepository _userRepository;
 
-    @Autowired
-    private EmailRepository _emailRepository;
+    // @Autowired
+    private final EmailRepository _emailRepository;
 
-    @Autowired
-    private PhoneRepository _phoneRepository;
+    // @Autowired
+    private final PhoneRepository _phoneRepository;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> createUser(UserDTO user) {

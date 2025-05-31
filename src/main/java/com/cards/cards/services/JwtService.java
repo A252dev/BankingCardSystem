@@ -11,9 +11,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -114,13 +111,14 @@ public class JwtService {
 
     // public String verify(UserModel user) {
 
-    //     Authentication authentication = authenticationManager.authenticate(
-    //             new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+    // Authentication authentication = authenticationManager.authenticate(
+    // new UsernamePasswordAuthenticationToken(user.getUsername(),
+    // user.getPassword()));
 
-    //     if (authentication.isAuthenticated()) {
-    //         return "Success";
-    //     } else {
-    //         return "fail";
-    //     }
+    // if (authentication.isAuthenticated()) {
+    // return "Success";
+    // } else {
+    // return "fail";
+    // }
     // }
 }

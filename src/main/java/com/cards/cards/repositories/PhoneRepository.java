@@ -12,7 +12,7 @@ import com.cards.cards.models.UserModel;
 @Repository
 public interface PhoneRepository extends JpaRepository<PhoneModel, Integer> {
     @Modifying
-    @Query("DELETE FROM PhoneData p WHERE p.user_id = ?1")
+    @Query("DELETE FROM PhoneModel p WHERE p.user_id = :user_id")
     void deleteByUserId(@Param("user_id") UserModel user_id);
 
     PhoneModel findByPhone(String phone);

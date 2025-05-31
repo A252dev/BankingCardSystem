@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class LoginUserDAO {
-    private Optional<String> email;
-    private Optional<String> phone;
-    private String password;
+    private Optional<String> email = Optional.empty();
+    private Optional<String> phone = Optional.empty();
+    private Optional<String> password = Optional.empty();
 }

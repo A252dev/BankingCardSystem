@@ -51,24 +51,26 @@ public class JwtService {
 
     public String generateToken(LoginUserDAO user) {
         UserModel findUser;
-        if (user.getEmail().isPresent())
-            findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).getUser_id();
-        findUser = userService.getUserEmailByPhone(user.getPhone().get()).getUser_id();
-        if (findUser != null
-                && passwordEncoder.matches(user.getPassword(),
-                        findUser.getPassword())) {
-            Map<String, Object> claims = new HashMap<>();
+        if (user.getPassword().isPresent()) {
+            if (user.getEmail().isPresent())
+                findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).getUser_id();
+            else
+                findUser = userService.getUserEmailByPhone(user.getPhone().get()).getUser_id();
+            if (findUser != null
+                    && passwordEncoder.matches(user.getPassword().get(),
+                            findUser.getPassword())) {
+                Map<String, Object> claims = new HashMap<>();
 
-            return Jwts.builder()
-                    .claims(claims)
-                    .subject(findUser.getId().toString())
-                    .issuedAt(new Date(System.currentTimeMillis()))
-                    .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 24))
-                    .signWith(getKey())
-                    .compact();
-        } else {
-            return null;
+                return Jwts.builder()
+                        .claims(claims)
+                        .subject(findUser.getId().toString())
+                        .issuedAt(new Date(System.currentTimeMillis()))
+                        .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 60 * 24))
+                        .signWith(getKey())
+                        .compact();
+            }
         }
+        return null;
     }
 
     private Key getKey() {

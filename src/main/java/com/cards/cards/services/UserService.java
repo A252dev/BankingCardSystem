@@ -31,13 +31,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // @Autowired
     private final UserRepository _userRepository;
-
-    // @Autowired
     private final EmailRepository _emailRepository;
-
-    // @Autowired
     private final PhoneRepository _phoneRepository;
 
     @Transactional(propagation = Propagation.REQUIRED)

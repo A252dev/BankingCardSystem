@@ -34,4 +34,8 @@ public class AccountModel {
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
+    public AccountModel(UserModel user_id, BigDecimal balance) {
+        this.user_id = user_id;
+        this.balance = balance;
+    }
 }

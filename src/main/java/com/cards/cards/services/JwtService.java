@@ -28,9 +28,7 @@ public class JwtService {
 
     private String secretKey = null;
     private SecretKey validateKey = null;
-
-    // @Autowired
-    // private AuthenticationManager authenticationManager;
+    private UserModel findUser = null;
 
     @Autowired
     private UserService userService;
@@ -50,7 +48,6 @@ public class JwtService {
     }
 
     public String generateToken(LoginUserDAO user) {
-        UserModel findUser;
         if (user.getPassword().isPresent()) {
             if (user.getEmail().isPresent())
                 findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).getUser_id();
@@ -110,17 +107,4 @@ public class JwtService {
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
-
-    // public String verify(UserModel user) {
-
-    // Authentication authentication = authenticationManager.authenticate(
-    // new UsernamePasswordAuthenticationToken(user.getUsername(),
-    // user.getPassword()));
-
-    // if (authentication.isAuthenticated()) {
-    // return "Success";
-    // } else {
-    // return "fail";
-    // }
-    // }
 }

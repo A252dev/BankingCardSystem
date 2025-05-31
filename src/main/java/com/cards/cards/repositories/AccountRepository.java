@@ -13,5 +13,5 @@ import com.cards.cards.models.UserModel;
 public interface AccountRepository extends JpaRepository<AccountModel, Integer> {
     @Modifying
     @Query("DELETE FROM AccountModel p WHERE p.user_id = ?1")
-    void deleteBalance(@Param("user_id") UserModel user_id);
+    void deleteByUserId(@Param("user_id") UserModel user_id);
 }

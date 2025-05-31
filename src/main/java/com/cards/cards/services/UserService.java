@@ -1,5 +1,6 @@
 package com.cards.cards.services;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cards.cards.dao.UserDTO;
+import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.PhoneModel;
 import com.cards.cards.models.UserModel;
+import com.cards.cards.repositories.AccountRepository;
 import com.cards.cards.repositories.EmailRepository;
 import com.cards.cards.repositories.PhoneRepository;
 import com.cards.cards.repositories.UserRepository;
@@ -34,6 +37,9 @@ public class UserService implements UserDetailsService {
     private final UserRepository _userRepository;
     private final EmailRepository _emailRepository;
     private final PhoneRepository _phoneRepository;
+    private final AccountRepository _accountRepository;
+
+    private Optional<UserModel> findUserId = Optional.empty();
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> createUser(UserDTO user) {
@@ -55,18 +61,19 @@ public class UserService implements UserDetailsService {
             _userRepository.save(newUser);
             _emailRepository.save(new EmailModel(newUser, user.getEmail()));
             _phoneRepository.save(new PhoneModel(newUser, user.getPhone()));
+            _accountRepository.save(new AccountModel(newUser, BigDecimal.valueOf(0.0)));
             return new ResponseEntity<String>("User has created.", HttpStatus.OK);
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> deleteUser() {
-        Optional<UserModel> deleteUserId = _userRepository
-                .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
-        if (deleteUserId.isPresent()) {
-            _phoneRepository.deleteByUserId(deleteUserId.get());
-            _emailRepository.deleteAll(_emailRepository.findByUserId(deleteUserId.get()));
-            _userRepository.delete(deleteUserId.get());
+        findUserId = this.getAuthUserId();
+        if (findUserId.isPresent()) {
+            _accountRepository.deleteByUserId(findUserId.get());
+            _phoneRepository.deleteByUserId(findUserId.get());
+            _emailRepository.deleteAll(_emailRepository.findByUserId(findUserId.get()));
+            _userRepository.delete(findUserId.get());
             return new ResponseEntity<String>("User has deleted.", HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("User not found!", HttpStatus.NOT_FOUND);
@@ -75,11 +82,11 @@ public class UserService implements UserDetailsService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> updateUser(UserDTO user) {
-        Optional<UserModel> updateUser = _userRepository
-                .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
-        if (updateUser.isPresent()) {
-            _emailRepository.updateUser(updateUser.get(), user.getEmail());
-            _userRepository.save(new UserModel(updateUser.get().getId(), user.getName(), user.getDate(),
+        findUserId = this.getAuthUserId();
+        if (findUserId.isPresent()) {
+            _phoneRepository.updateUser(findUserId.get(), user.getPhone());
+            _emailRepository.updateUser(findUserId.get(), user.getEmail());
+            _userRepository.save(new UserModel(findUserId.get().getId(), user.getName(), user.getDate(),
                     passwordEncoder.encode(user.getPassword())));
             return new ResponseEntity<String>("User has updated.", HttpStatus.OK);
         } else {
@@ -105,7 +112,8 @@ public class UserService implements UserDetailsService {
         return _phoneRepository.findByPhone(phone);
     }
 
-    // public Optional<UserModel> getUserDataFromDatabase(UserModel model) {
-    // return _userRepository.findById(model.getId());
-    // }
+    private Optional<UserModel> getAuthUserId() {
+        return _userRepository
+                .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
 }

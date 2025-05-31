@@ -1,4 +1,4 @@
-package com.cards.cards.api;
+package com.cards.cards.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +42,8 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String getUser(@RequestHeader(name = "Authorization") String token) {
-
+    public String getUser() {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return new String("hi. " + user);
+        return new String("hi. your user_id is: " + user);
     }
 }

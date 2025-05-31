@@ -11,7 +11,7 @@ public class UserDTO {
     private String name;
     private String password;
     private Date date;
-    private Optional<BigDecimal> balance = Optional.empty();
+    // private Optional<BigDecimal> balance = Optional.empty();
     private String email;
     private String phone;
 }

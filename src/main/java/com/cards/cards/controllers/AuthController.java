@@ -1,4 +1,4 @@
-package com.cards.cards.api;
+package com.cards.cards.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

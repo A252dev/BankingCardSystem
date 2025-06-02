@@ -1,6 +1,7 @@
 package com.cards.cards.services;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.AccountModel;
@@ -115,5 +117,9 @@ public class UserService implements UserDetailsService {
     private Optional<UserModel> getAuthUserId() {
         return _userRepository
                 .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
+    }
+
+    public List<UserModel> getAllUsers() {
+        return _userRepository.findAll();
     }
 }

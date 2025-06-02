@@ -15,7 +15,7 @@ import com.cards.cards.models.UserModel;
 public interface AccountRepository extends JpaRepository<AccountModel, Integer> {
 
     @Modifying
-    @Query("UPDATE AccountModel a SET a.balance = :balance WHERE a.user_id = :user_id")
+    @Query("UPDATE AccountModel a SET a.balance = ?2 WHERE a.user_id = ?1")
     void updateBalance(@Param("user_id") UserModel user_id, @Param("balance") BigDecimal balance);
 
     @Modifying

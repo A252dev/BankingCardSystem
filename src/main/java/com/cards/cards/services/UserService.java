@@ -15,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
-
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.EmailModel;
@@ -128,5 +126,9 @@ public class UserService implements UserDetailsService {
 
     public List<UserModel> getAllUsers() {
         return _userRepository.findAll();
+    }
+
+    public String transfer(Integer user_id) {
+        return "Success";
     }
 }

@@ -9,10 +9,10 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class TaskService {
-    
+
     private final AccountRepository _accountRepository;
 
-    public void addUserBalance(){
+    public void addUserBalance() {
         System.out.println("hi");
     }
 }

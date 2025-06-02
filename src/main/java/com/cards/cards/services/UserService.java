@@ -57,8 +57,9 @@ public class UserService implements UserDetailsService {
          */
 
         UserModel newUser = new UserModel(user.getName(), user.getDate(), user.getPassword());
-        if (_userRepository.findFirstByName(newUser.getName()) != null) {
-            return new ResponseEntity<String>("The user exists!", HttpStatus.BAD_REQUEST);
+        if (_emailRepository.findByEmail(user.getEmail()) != null
+                || _phoneRepository.findByPhone(user.getPhone()) != null) {
+            return new ResponseEntity<String>("The email or phone is already exists!", HttpStatus.BAD_REQUEST);
         } else {
             _userRepository.save(newUser);
             _emailRepository.save(new EmailModel(newUser, user.getEmail()));
@@ -86,8 +87,14 @@ public class UserService implements UserDetailsService {
     public ResponseEntity<String> updateUser(UserDTO user) {
         findUserId = this.getAuthUserId();
         if (findUserId.isPresent()) {
-            _phoneRepository.updateUser(findUserId.get(), user.getPhone());
-            _emailRepository.updateUser(findUserId.get(), user.getEmail());
+            if (_phoneRepository.findByPhone(user.getPhone()) != null)
+                return new ResponseEntity<String>("The phone is already exists!", HttpStatus.BAD_REQUEST);
+            else
+                _phoneRepository.updateUser(findUserId.get(), user.getPhone());
+            if (_emailRepository.findByEmail(user.getEmail()) != null)
+                return new ResponseEntity<String>("The email is already exists!", HttpStatus.BAD_REQUEST);
+            else
+                _emailRepository.updateUser(findUserId.get(), user.getEmail());
             _userRepository.save(new UserModel(findUserId.get().getId(), user.getName(), user.getDate(),
                     passwordEncoder.encode(user.getPassword())));
             return new ResponseEntity<String>("User has updated.", HttpStatus.OK);

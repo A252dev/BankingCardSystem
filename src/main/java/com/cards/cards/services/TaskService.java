@@ -21,7 +21,6 @@ public class TaskService {
 
         List<AccountModel> listUsers = _accountRepository.findAll();
         for (AccountModel user : listUsers) {
-            System.out.println(user.getBalance().add(BigDecimal.valueOf(10)).compareTo(user.getBalance()));
             if (user.getBalance().compareTo(BigDecimal.valueOf(120)) <= 0) {
                 user.setBalance(user.getBalance().add(BigDecimal.valueOf(10)).setScale(2, RoundingMode.HALF_UP));
                 _accountRepository.save(user);

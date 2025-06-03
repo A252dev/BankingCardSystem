@@ -46,17 +46,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> createUser(UserDTO user) {
-
-        /*
-         * {
-         * "name": "John",
-         * "date": "1900-01-01",
-         * "password": "password",
-         * "email": "email@mail.com",
-         * "phone": "78005553535"
-         * }
-         */
-
         UserModel newUser = new UserModel(user.getName(), user.getDate(), user.getPassword());
         if (_emailRepository.findByEmail(user.getEmail()) != null
                 || _phoneRepository.findByPhone(user.getPhone()) != null) {
@@ -131,31 +120,35 @@ public class UserService implements UserDetailsService {
         return _userRepository.findAll();
     }
 
-    private Optional<AccountModel> getMyAccount() {
-        return _accountRepository.findByUser_id(this.getAuthUserId().get());
-    }
-
     @Transactional(propagation = Propagation.REQUIRED)
     public String transfer(TransferDTO transferDTO) {
-        findUserAccountId = _accountRepository.findByUser_id(_userRepository.findById(transferDTO.getUser_id()).get());
-        Optional<AccountModel> myBalance = this.getMyAccount();
-        if (findUserAccountId.isPresent()) {
-
-            if (myBalance.get().getBalance().compareTo(BigDecimal.valueOf(transferDTO.getAmount())) < transferDTO
-                    .getAmount()) {
-                return new String("Not enough money!");
+        if (_userRepository.findById(transferDTO.getUser_id()).isPresent()) {
+            findUserAccountId = _accountRepository
+                    .findFirstByUser_id(_userRepository.findById(transferDTO.getUser_id()).get());
+            if (findUserAccountId.isPresent()) {
+                Optional<AccountModel> myBalance = _accountRepository.findFirstByUser_id(this.getAuthUserId().get());
+                if (myBalance.get().getBalance().compareTo(BigDecimal.valueOf(transferDTO.getAmount())) <= 0) {
+                    return new String("Not enough money!");
+                } else {
+                    System.out.println("My balance before: " + myBalance.get().getBalance());
+                    System.out.println("Target user balance before: " + findUserAccountId.get().getBalance());
+                    myBalance.get()
+                            .setBalance(
+                                    myBalance.get().getBalance().subtract(BigDecimal.valueOf(transferDTO.getAmount())));
+                    findUserAccountId.get()
+                            .setBalance(
+                                    findUserAccountId.get().getBalance()
+                                            .add(BigDecimal.valueOf(transferDTO.getAmount())));
+                    _accountRepository.save(findUserAccountId.get());
+                    System.out.println("My balance after: " + myBalance.get().getBalance());
+                    System.out.println("Target user balance after: " + findUserAccountId.get().getBalance());
+                }
             } else {
-                myBalance.get()
-                        .setBalance(myBalance.get().getBalance().subtract(BigDecimal.valueOf(transferDTO.getAmount())));
-                findUserAccountId.get()
-                        .setBalance(
-                                findUserAccountId.get().getBalance().add(BigDecimal.valueOf(transferDTO.getAmount())));
-                _accountRepository.save(findUserAccountId.get());
+                return new String("User not found!");
             }
-
         } else {
             return new String("User not found!");
         }
-        return null;
+        return new String("Transaction complete.");
     }
 }

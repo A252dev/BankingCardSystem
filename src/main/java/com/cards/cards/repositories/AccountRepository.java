@@ -1,6 +1,7 @@
 package com.cards.cards.repositories;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.UserModel;
-import java.util.Optional;
+import java.util.List;
+
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountModel, Integer> {
@@ -23,6 +25,6 @@ public interface AccountRepository extends JpaRepository<AccountModel, Integer> 
     @Query("DELETE FROM AccountModel a WHERE a.user_id = ?1")
     void deleteByUserId(@Param("user_id") UserModel user_id);
 
-    @Query("SELECT user_id FROM AccountModel a WHERE a.user_id = :user_id")
-    Optional<AccountModel> findByUser_id(UserModel user_id);
+    @Query("SELECT a FROM AccountModel a WHERE a.user_id = :user_id")
+    Optional<AccountModel> findFirstByUser_id(@Param("user_id") UserModel user_id);
 }

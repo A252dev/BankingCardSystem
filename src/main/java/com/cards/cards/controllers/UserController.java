@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.UserModel;
@@ -29,12 +30,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/user-create")
-    public ResponseEntity<String> register(@RequestBody UserDTO user) {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        return userService.createUser(user);
-    }
-
     @PutMapping("/user-update")
     public ResponseEntity<String> update(@RequestBody UserDTO user) {
         return userService.updateUser(user);
@@ -49,6 +44,11 @@ public class UserController {
     public String getUser() {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         return new String("hi. your user_id is: " + user);
+    }
+
+    @PostMapping("/transfer")
+    public String transfer(@RequestBody TransferDTO transferDTO){
+        return userService.transfer(transferDTO);
     }
 
     @GetMapping("/users")

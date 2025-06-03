@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.UserModel;
+import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountModel, Integer> {
@@ -21,4 +22,7 @@ public interface AccountRepository extends JpaRepository<AccountModel, Integer> 
     @Modifying
     @Query("DELETE FROM AccountModel a WHERE a.user_id = ?1")
     void deleteByUserId(@Param("user_id") UserModel user_id);
+
+    @Query("SELECT user_id FROM AccountModel a WHERE a.user_id = :user_id")
+    Optional<AccountModel> findByUser_id(UserModel user_id);
 }

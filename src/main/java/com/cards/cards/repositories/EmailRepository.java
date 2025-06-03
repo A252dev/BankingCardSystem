@@ -10,11 +10,12 @@ import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.UserModel;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmailRepository extends JpaRepository<EmailModel, Integer> {
 
-    EmailModel findByEmail(String email);
+    Optional<EmailModel> findByEmail(String email);
 
     @Query("SELECT e FROM EmailModel e WHERE e.user_id = ?1")
     List<EmailModel> findByUserId(@Param("user_id") UserModel user_id);

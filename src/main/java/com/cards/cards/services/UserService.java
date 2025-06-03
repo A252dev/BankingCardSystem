@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.EmailModel;
@@ -40,6 +42,7 @@ public class UserService implements UserDetailsService {
     private final AccountRepository _accountRepository;
 
     private Optional<UserModel> findUserId = Optional.empty();
+    private Optional<AccountModel> findUserAccountId = Optional.empty();
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<String> createUser(UserDTO user) {
@@ -111,7 +114,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public EmailModel getUserEmailFromDatabase(String email) {
+    public Optional<EmailModel> getUserEmailFromDatabase(String email) {
         return _emailRepository.findByEmail(email);
     }
 
@@ -128,7 +131,31 @@ public class UserService implements UserDetailsService {
         return _userRepository.findAll();
     }
 
-    public String transfer(Integer user_id) {
-        return "Success";
+    private Optional<AccountModel> getMyAccount() {
+        return _accountRepository.findByUser_id(this.getAuthUserId().get());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public String transfer(TransferDTO transferDTO) {
+        findUserAccountId = _accountRepository.findByUser_id(_userRepository.findById(transferDTO.getUser_id()).get());
+        Optional<AccountModel> myBalance = this.getMyAccount();
+        if (findUserAccountId.isPresent()) {
+
+            if (myBalance.get().getBalance().compareTo(BigDecimal.valueOf(transferDTO.getAmount())) < transferDTO
+                    .getAmount()) {
+                return new String("Not enough money!");
+            } else {
+                myBalance.get()
+                        .setBalance(myBalance.get().getBalance().subtract(BigDecimal.valueOf(transferDTO.getAmount())));
+                findUserAccountId.get()
+                        .setBalance(
+                                findUserAccountId.get().getBalance().add(BigDecimal.valueOf(transferDTO.getAmount())));
+                _accountRepository.save(findUserAccountId.get());
+            }
+
+        } else {
+            return new String("User not found!");
+        }
+        return null;
     }
 }

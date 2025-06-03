@@ -50,7 +50,7 @@ public class JwtService {
     public String generateToken(LoginUserDAO user) {
         if (user.getPassword().isPresent()) {
             if (user.getEmail().isPresent())
-                findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).getUser_id();
+                findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).get().getUser_id();
             else
                 findUser = userService.getUserEmailByPhone(user.getPhone().get()).getUser_id();
             if (findUser != null

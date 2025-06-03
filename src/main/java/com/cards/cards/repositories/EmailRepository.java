@@ -17,6 +17,8 @@ public interface EmailRepository extends JpaRepository<EmailModel, Integer> {
 
     Optional<EmailModel> findByEmail(String email);
 
+    List<EmailModel> findListByEmail(String email);
+
     @Query("SELECT e FROM EmailModel e WHERE e.user_id = ?1")
     List<EmailModel> findByUserId(@Param("user_id") UserModel user_id);
 

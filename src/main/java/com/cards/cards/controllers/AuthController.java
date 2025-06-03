@@ -13,7 +13,10 @@ import com.cards.cards.dao.UserDTO;
 import com.cards.cards.services.JwtService;
 import com.cards.cards.services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
+@Tag(name = "User creation and authentication")
 public class AuthController {
 
     @Autowired
@@ -22,7 +25,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping(path = "/login")
     public ResponseEntity<String> login(@RequestBody LoginUserDAO user) {
         String jwtToken = jwtService.generateToken(user);
         if (jwtToken != null)
@@ -30,7 +33,7 @@ public class AuthController {
         return new ResponseEntity<String>("Data is incorrect!", HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/user-create")
+    @PostMapping(path = "/user-create")
     public ResponseEntity<String> register(@RequestBody UserDTO user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.createUser(user);

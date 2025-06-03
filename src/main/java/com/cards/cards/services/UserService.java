@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.cards.cards.dao.SearchDAO;
 import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.AccountModel;
@@ -122,9 +122,10 @@ public class UserService implements UserDetailsService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public String transfer(TransferDTO transferDTO) {
-        if (_userRepository.findById(transferDTO.getUser_id()).isPresent()) {
+        findUserId = _userRepository.findById(transferDTO.getUser_id());
+        if (findUserId.isPresent()) {
             findUserAccountId = _accountRepository
-                    .findFirstByUser_id(_userRepository.findById(transferDTO.getUser_id()).get());
+                    .findFirstByUser_id(findUserId.get());
             if (findUserAccountId.isPresent()) {
                 Optional<AccountModel> myBalance = _accountRepository.findFirstByUser_id(this.getAuthUserId().get());
                 if (myBalance.get().getBalance().compareTo(BigDecimal.valueOf(transferDTO.getAmount())) <= 0) {
@@ -150,5 +151,18 @@ public class UserService implements UserDetailsService {
             return new String("User not found!");
         }
         return new String("Transaction complete.");
+    }
+
+    public Object searchUsers(SearchDAO searchDAO) {
+        if (searchDAO.getBirthday().isPresent()) {
+            return _userRepository.findByDate(searchDAO.getBirthday().get()).toArray();
+        }
+        if (searchDAO.getEmail().isPresent()) {
+            return _emailRepository.findListByEmail(searchDAO.getEmail().get()).toArray();
+        }
+        if (searchDAO.getPhone().isPresent()) {
+            return _phoneRepository.findAllByPhone(searchDAO.getPhone().get());
+        }
+        return null;
     }
 }

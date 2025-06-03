@@ -5,19 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cards.cards.dao.SearchDAO;
 import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
-import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.UserModel;
 import com.cards.cards.services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,34 +24,35 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @AllArgsConstructor
+@Tag(name = "User actions")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PutMapping("/user-update")
+    @PutMapping(path = "/user-update")
     public ResponseEntity<String> update(@RequestBody UserDTO user) {
         return userService.updateUser(user);
     }
 
-    @DeleteMapping("/user-delete")
+    @DeleteMapping(path = "/user-delete")
     public ResponseEntity<String> delete() {
         return userService.deleteUser();
     }
 
-    @GetMapping("/user")
-    public String getUser() {
-        String user = SecurityContextHolder.getContext().getAuthentication().getName();
-        return new String("hi. your user_id is: " + user);
-    }
-
-    @PostMapping("/transfer")
-    public String transfer(@RequestBody TransferDTO transferDTO){
+    @PostMapping(path = "/transfer")
+    public String transfer(@RequestBody TransferDTO transferDTO) {
         return userService.transfer(transferDTO);
     }
 
-    @GetMapping("/users")
+    @GetMapping(path = "/users")
+    @Tag(name = "Information")
     public ResponseEntity<List<UserModel>> getUsers() {
         return new ResponseEntity<List<UserModel>>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user-search")
+    public ResponseEntity<Object> searchUser(@RequestBody SearchDAO searchDAO) {
+        return new ResponseEntity<Object>(userService.searchUsers(searchDAO), HttpStatus.OK);
     }
 }

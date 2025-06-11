@@ -1,8 +1,8 @@
 package com.cards.cards.dao;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class TransferDTO {
     private Integer user_id;
     private Double amount;

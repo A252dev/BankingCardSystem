@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.cards.cards.services.TaskService;
+import com.cards.cards.services.QueueService;
 
 @Component
-public class Tasks {
+public class Queues {
 
     @Autowired
-    private TaskService _taskService;
+    private QueueService _queueService;
 
     @Scheduled(fixedRate = 5000, initialDelay = 2000) // 5/2 seconds
     private void addBalance() {
-        _taskService.addUserBalance();
+        _queueService.addUserBalance();
     }
 }

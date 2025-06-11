@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class TaskService {
+public class QueueService {
 
     private final AccountRepository _accountRepository;
 

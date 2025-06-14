@@ -1,0 +1,27 @@
+package com.cards.cards.controllers;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cards.cards.dao.CardDTO;
+import com.cards.cards.services.CardService;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@RestController
+@Tag(name = "User card manager")
+public class CardController {
+
+    @Autowired
+    private CardService cardService;
+
+    @PutMapping("/user-add-card")
+    public ResponseEntity<Throwable> addCard(@RequestBody Optional<CardDTO> cardDTO) {
+        return cardService.addUserCard(cardDTO);
+    }
+}

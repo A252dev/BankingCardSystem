@@ -2,9 +2,9 @@ package com.cards.cards.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class TransferExceptions extends Exception {
 
     public ResponseEntity<Throwable> NotEnough() {

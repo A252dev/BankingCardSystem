@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/user-create")
-    public ResponseEntity<String> register(@RequestBody UserDTO user) {
+    public ResponseEntity<Throwable> register(@RequestBody UserDTO user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userService.createUser(user);
     }

@@ -52,7 +52,7 @@ public class JwtService {
             if (user.getEmail().isPresent())
                 findUser = userService.getUserEmailFromDatabase(user.getEmail().get()).get().getUser_id();
             else
-                findUser = userService.getUserEmailByPhone(user.getPhone().get()).getUser_id();
+                findUser = userService.getUserEmailByPhone(user.getPhone().get()).get().getUser_id();
             if (findUser != null
                     && passwordEncoder.matches(user.getPassword().get(),
                             findUser.getPassword())) {

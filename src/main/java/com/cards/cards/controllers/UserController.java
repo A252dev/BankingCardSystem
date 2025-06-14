@@ -31,17 +31,17 @@ public class UserController {
     private UserService userService;
 
     @PutMapping(path = "/user-update")
-    public ResponseEntity<String> update(@RequestBody UserDTO user) {
+    public ResponseEntity<Throwable> update(@RequestBody UserDTO user) {
         return userService.updateUser(user);
     }
 
     @DeleteMapping(path = "/user-delete")
-    public ResponseEntity<String> delete() {
+    public ResponseEntity<Throwable> delete() {
         return userService.deleteUser();
     }
 
     @PostMapping(path = "/transfer")
-    public String transfer(@RequestBody TransferDTO transferDTO) {
+    public ResponseEntity<Throwable> transfer(@RequestBody TransferDTO transferDTO) {
         return userService.transfer(transferDTO);
     }
 

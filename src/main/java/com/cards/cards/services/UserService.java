@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cards.cards.dao.SearchDAO;
 import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
+import com.cards.cards.exceptions.TransferExceptions;
+import com.cards.cards.exceptions.UserExceptions;
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.PhoneModel;
@@ -44,52 +46,58 @@ public class UserService implements UserDetailsService {
     private Optional<UserModel> findUserId = Optional.empty();
     private Optional<AccountModel> findUserAccountId = Optional.empty();
 
+    @Autowired
+    private UserExceptions userExceptions;
+
+    @Autowired
+    private TransferExceptions transferExceptions;
+
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> createUser(UserDTO user) {
+    public ResponseEntity<Throwable> createUser(UserDTO user) {
         UserModel newUser = new UserModel(user.getName(), user.getDate(), user.getPassword());
-        if (_emailRepository.findByEmail(user.getEmail()) != null
-                || _phoneRepository.findByPhone(user.getPhone()) != null) {
-            return new ResponseEntity<String>("The email or phone is already exists!", HttpStatus.BAD_REQUEST);
+        if (!_emailRepository.findByEmail(user.getEmail()).isEmpty()
+                || !_phoneRepository.findByPhone(user.getPhone()).isEmpty()) {
+            return userExceptions.EmailOrPhoneIsExists();
         } else {
             _userRepository.save(newUser);
             _emailRepository.save(new EmailModel(newUser, user.getEmail()));
             _phoneRepository.save(new PhoneModel(newUser, user.getPhone()));
             _accountRepository.save(new AccountModel(newUser, BigDecimal.valueOf(0.0)));
-            return new ResponseEntity<String>("User has created.", HttpStatus.OK);
+            return userExceptions.Created();
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> deleteUser() {
+    public ResponseEntity<Throwable> deleteUser() {
         findUserId = this.getAuthUserId();
         if (findUserId.isPresent()) {
             _accountRepository.deleteByUserId(findUserId.get());
             _phoneRepository.deleteByUserId(findUserId.get());
             _emailRepository.deleteAll(_emailRepository.findByUserId(findUserId.get()));
             _userRepository.delete(findUserId.get());
-            return new ResponseEntity<String>("User has deleted.", HttpStatus.OK);
+            return userExceptions.Deleted();
         } else {
-            return new ResponseEntity<String>("User not found!", HttpStatus.NOT_FOUND);
+            return userExceptions.NotFound();
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<String> updateUser(UserDTO user) {
+    public ResponseEntity<Throwable> updateUser(UserDTO user) {
         findUserId = this.getAuthUserId();
         if (findUserId.isPresent()) {
             if (_phoneRepository.findByPhone(user.getPhone()) != null)
-                return new ResponseEntity<String>("The phone is already exists!", HttpStatus.BAD_REQUEST);
+                return userExceptions.PhoneIsExists();
             else
                 _phoneRepository.updateUser(findUserId.get(), user.getPhone());
             if (_emailRepository.findByEmail(user.getEmail()) != null)
-                return new ResponseEntity<String>("The email is already exists!", HttpStatus.BAD_REQUEST);
+                return userExceptions.EmailIsExists();
             else
                 _emailRepository.updateUser(findUserId.get(), user.getEmail());
             _userRepository.save(new UserModel(findUserId.get().getId(), user.getName(), user.getDate(),
                     passwordEncoder.encode(user.getPassword())));
-            return new ResponseEntity<String>("User has updated.", HttpStatus.OK);
+            return userExceptions.Ok();
         } else {
-            return new ResponseEntity<String>("User not found!", HttpStatus.NOT_FOUND);
+            return userExceptions.NotFound();
         }
     }
 
@@ -107,7 +115,7 @@ public class UserService implements UserDetailsService {
         return _emailRepository.findByEmail(email);
     }
 
-    public PhoneModel getUserEmailByPhone(String phone) {
+    public Optional<PhoneModel> getUserEmailByPhone(String phone) {
         return _phoneRepository.findByPhone(phone);
     }
 
@@ -121,7 +129,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public String transfer(TransferDTO transferDTO) {
+    public ResponseEntity<Throwable> transfer(TransferDTO transferDTO) {
         findUserId = _userRepository.findById(transferDTO.getUser_id());
         if (findUserId.isPresent()) {
             findUserAccountId = _accountRepository
@@ -129,7 +137,7 @@ public class UserService implements UserDetailsService {
             if (findUserAccountId.isPresent()) {
                 Optional<AccountModel> myBalance = _accountRepository.findFirstByUser_id(this.getAuthUserId().get());
                 if (myBalance.get().getBalance().compareTo(BigDecimal.valueOf(transferDTO.getAmount())) <= 0) {
-                    return new String("Not enough money!");
+                    return transferExceptions.NotEnough();
                 } else {
                     System.out.println("My balance before: " + myBalance.get().getBalance());
                     System.out.println("Target user balance before: " + findUserAccountId.get().getBalance());
@@ -145,12 +153,12 @@ public class UserService implements UserDetailsService {
                     System.out.println("Target user balance after: " + findUserAccountId.get().getBalance());
                 }
             } else {
-                return new String("User not found!");
+                return userExceptions.NotFound();
             }
         } else {
-            return new String("User not found!");
+            return userExceptions.NotFound();
         }
-        return new String("Transaction complete.");
+        return transferExceptions.Ok();
     }
 
     public Object searchUsers(SearchDAO searchDAO) {

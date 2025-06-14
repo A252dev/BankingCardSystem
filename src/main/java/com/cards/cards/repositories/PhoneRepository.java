@@ -1,6 +1,8 @@
 package com.cards.cards.repositories;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +18,7 @@ public interface PhoneRepository extends JpaRepository<PhoneModel, Integer> {
     @Query("DELETE FROM PhoneModel p WHERE p.user_id = :user_id")
     void deleteByUserId(@Param("user_id") UserModel user_id);
 
-    PhoneModel findByPhone(String phone);
+    Optional<PhoneModel> findByPhone(String phone);
 
     @Query("SELECT p FROM PhoneModel p WHERE p.phone = :phone")
     List<PhoneModel> findAllByPhone(@Param("phone") String phone);

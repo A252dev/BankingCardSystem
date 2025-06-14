@@ -118,7 +118,7 @@ public class UserService implements UserDetailsService {
         return _phoneRepository.findByPhone(phone);
     }
 
-    private Optional<UserModel> getAuthUserId() {
+    public Optional<UserModel> getAuthUserId() {
         return _userRepository
                 .findById(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName()));
     }

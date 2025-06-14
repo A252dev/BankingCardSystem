@@ -2,14 +2,13 @@ package com.cards.cards.services;
 
 import java.util.Optional;
 
-import javax.smartcardio.CardException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cards.cards.dao.CardDTO;
 import com.cards.cards.exceptions.CardExceptions;
+import com.cards.cards.models.AccountModel;
 import com.cards.cards.repositories.AccountRepository;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +16,9 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class CardService {
+
+    @Autowired
+    private UserService userService;
 
     private final AccountRepository _accountRepository;
 
@@ -27,6 +29,8 @@ public class CardService {
 
         if (!cardDTO.isPresent())
             return cardExceptions.Error();
+        _accountRepository.save(new AccountModel(cardDTO.get().getNumber(), userService.getAuthUserId().get(),
+                cardDTO.get().getExpire(), cardDTO.get().getStatus(), cardDTO.get().getBalance()));
         return cardExceptions.Ok();
     }
 

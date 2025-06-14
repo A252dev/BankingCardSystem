@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
             _userRepository.save(newUser);
             _emailRepository.save(new EmailModel(newUser, user.getEmail()));
             _phoneRepository.save(new PhoneModel(newUser, user.getPhone()));
-            _accountRepository.save(new AccountModel(newUser, BigDecimal.valueOf(0.0)));
+            // _accountRepository.save(new AccountModel(newUser, BigDecimal.valueOf(0.0)));
             return userExceptions.Created();
         }
     }

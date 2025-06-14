@@ -24,8 +24,17 @@
             <column name="id" type="serial">
                 <constraints primaryKey="true" unique="true"/>
             </column>
+            <column name="number" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
             <column name="user_id" type="integer">
                 <constraints nullable="false" unique="true" />
+            </column>
+            <column name="expire" type="varchar(12)">
+                <constraints nullable="false" unique="false" />
+            </column>
+            <column name="status" type="varchar(8)">
+                <constraints nullable="false" unique="false" />
             </column>
             <column name="balance" type="decimal ">
                 <constraints nullable="false" />

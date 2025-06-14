@@ -1,6 +1,7 @@
 package com.cards.cards.models;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,15 +30,33 @@ public class AccountModel {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "number", nullable = false)
+    private String number;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserModel user_id;
 
+    @Column(name = "expire", nullable = false, unique = false)
+    private Date expire;
+
+    @Column(name = "status", nullable = false)
+    private Status status;
+
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    public AccountModel(UserModel user_id, BigDecimal balance) {
+    public AccountModel(String number, UserModel user_id, Date expire, Status status, BigDecimal balance) {
+        this.number = number;
         this.user_id = user_id;
+        this.expire = expire;
+        this.status = status;
         this.balance = balance;
+    }
+
+    public enum Status {
+        ACTIVE,
+        BLOCKED,
+        EXPIRED
     }
 }

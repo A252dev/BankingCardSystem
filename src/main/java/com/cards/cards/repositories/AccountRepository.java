@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.UserModel;
-import java.util.List;
-
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountModel, Integer> {

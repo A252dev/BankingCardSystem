@@ -25,7 +25,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/login")
+    @PostMapping(path = "/user-login")
     public ResponseEntity<String> login(@RequestBody LoginUserDAO user) {
         String jwtToken = jwtService.generateToken(user);
         if (jwtToken != null)

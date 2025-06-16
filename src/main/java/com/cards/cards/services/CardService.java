@@ -38,6 +38,9 @@ public class CardService {
 
         if (!cardDTO.isPresent())
             return cardExceptions.Error();
+        _accountRepository.save(new AccountModel(_accountRepository.findByNumber(cardDTO.get().getNumber()).getId(),
+                cardDTO.get().getNumber(), userService.getAuthUserId().get(), cardDTO.get().getExpire(),
+                cardDTO.get().getStatus(), cardDTO.get().getBalance()));
         return cardExceptions.InfoOk();
     }
 }

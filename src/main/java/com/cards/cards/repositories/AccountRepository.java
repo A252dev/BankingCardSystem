@@ -24,6 +24,8 @@ public interface AccountRepository extends JpaRepository<AccountModel, Integer> 
     @Query("DELETE FROM AccountModel a WHERE a.user_id = ?1")
     void deleteByUserId(@Param("user_id") UserModel user_id);
 
+    AccountModel findByNumber(String number);
+
     @Query("SELECT a FROM AccountModel a WHERE a.user_id = :user_id")
     Optional<AccountModel> findFirstByUser_id(@Param("user_id") UserModel user_id);
 

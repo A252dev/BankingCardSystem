@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cards.cards.dao.CardDTO;
+import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.services.CardService;
 
@@ -26,17 +27,22 @@ public class CardController {
     private CardService cardService;
 
     @PostMapping("/user-add-card")
-    public ResponseEntity<Throwable> addCard(@RequestBody Optional<CardDTO> cardDTO) {
+    public ResponseEntity<Throwable> addCard(@RequestBody CardDTO cardDTO) {
         return cardService.addUserCard(cardDTO);
     }
 
     @PutMapping("/user-edit-card")
-    public ResponseEntity<Throwable> editCard(@RequestBody Optional<CardDTO> cardDTO) {
+    public ResponseEntity<Throwable> editCard(@RequestBody CardDTO cardDTO) {
         return cardService.editUserCard(cardDTO);
     }
 
     @GetMapping("/user-get-cards")
     public ResponseEntity<Optional<List<AccountModel>>> getAllCards() {
         return new ResponseEntity(cardService.getAllCards(), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/user-card-transfer")
+    public ResponseEntity<Throwable> transfer(@RequestBody TransferDTO transferDTO) {
+        return cardService.transfer(transferDTO);
     }
 }

@@ -5,13 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cards.cards.dao.SearchDAO;
-import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
 import com.cards.cards.models.UserModel;
 import com.cards.cards.services.UserService;
@@ -38,11 +36,6 @@ public class UserController {
     @DeleteMapping(path = "/user-delete")
     public ResponseEntity<Throwable> delete() {
         return userService.deleteUser();
-    }
-
-    @PostMapping(path = "/transfer")
-    public ResponseEntity<Throwable> transfer(@RequestBody TransferDTO transferDTO) {
-        return userService.transfer(transferDTO);
     }
 
     @GetMapping(path = "/users")

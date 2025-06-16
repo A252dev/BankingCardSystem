@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserExceptions extends Exception {
 
     public ResponseEntity<Throwable> NotFound() {
-        return new ResponseEntity(new Exception("User not found!").getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity(new Exception("Not found!").getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(value = HttpStatus.OK)

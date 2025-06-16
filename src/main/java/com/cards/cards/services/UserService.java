@@ -1,6 +1,5 @@
 package com.cards.cards.services;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.cards.cards.dao.SearchDAO;
-import com.cards.cards.dao.TransferDTO;
 import com.cards.cards.dao.UserDTO;
-import com.cards.cards.exceptions.TransferExceptions;
 import com.cards.cards.exceptions.UserExceptions;
-import com.cards.cards.models.AccountModel;
 import com.cards.cards.models.EmailModel;
 import com.cards.cards.models.PhoneModel;
 import com.cards.cards.models.UserModel;
@@ -43,13 +39,9 @@ public class UserService implements UserDetailsService {
     private final AccountRepository _accountRepository;
 
     private Optional<UserModel> findUserId = Optional.empty();
-    private Optional<AccountModel> findUserAccountId = Optional.empty();
 
     @Autowired
     private UserExceptions userExceptions;
-
-    @Autowired
-    private TransferExceptions transferExceptions;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<Throwable> createUser(UserDTO user) {
@@ -125,39 +117,6 @@ public class UserService implements UserDetailsService {
 
     public List<UserModel> getAllUsers() {
         return _userRepository.findAll();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public ResponseEntity<Throwable> transfer(TransferDTO transferDTO) {
-        findUserId = _userRepository.findById(transferDTO.getUser_id());
-        if (findUserId.isPresent()) {
-            findUserAccountId = _accountRepository
-                    .findFirstByUser_id(findUserId.get());
-            if (findUserAccountId.isPresent()) {
-                Optional<AccountModel> myBalance = _accountRepository.findFirstByUser_id(this.getAuthUserId().get());
-                if (myBalance.get().getBalance().compareTo(BigDecimal.valueOf(transferDTO.getAmount())) <= 0) {
-                    return transferExceptions.NotEnough();
-                } else {
-                    System.out.println("My balance before: " + myBalance.get().getBalance());
-                    System.out.println("Target user balance before: " + findUserAccountId.get().getBalance());
-                    myBalance.get()
-                            .setBalance(
-                                    myBalance.get().getBalance().subtract(BigDecimal.valueOf(transferDTO.getAmount())));
-                    findUserAccountId.get()
-                            .setBalance(
-                                    findUserAccountId.get().getBalance()
-                                            .add(BigDecimal.valueOf(transferDTO.getAmount())));
-                    _accountRepository.save(findUserAccountId.get());
-                    System.out.println("My balance after: " + myBalance.get().getBalance());
-                    System.out.println("Target user balance after: " + findUserAccountId.get().getBalance());
-                }
-            } else {
-                return userExceptions.NotFound();
-            }
-        } else {
-            return userExceptions.NotFound();
-        }
-        return transferExceptions.Ok();
     }
 
     public Object searchUsers(SearchDAO searchDAO) {

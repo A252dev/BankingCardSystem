@@ -34,4 +34,10 @@ public class CardService {
         return cardExceptions.Ok();
     }
 
+    public ResponseEntity<Throwable> editUserCard(Optional<CardDTO> cardDTO) {
+
+        if (!cardDTO.isPresent())
+            return cardExceptions.Error();
+        return cardExceptions.InfoOk();
+    }
 }

@@ -14,4 +14,8 @@ public class CardExceptions extends Exception {
     public ResponseEntity<Throwable> Ok() {
         return new ResponseEntity(new Exception("Card has added.").getMessage(), HttpStatus.OK);
     }
+
+    public ResponseEntity<Throwable> InfoOk() {
+        return new ResponseEntity(new Exception("Card has updated.").getMessage(), HttpStatus.OK);
+    }
 }

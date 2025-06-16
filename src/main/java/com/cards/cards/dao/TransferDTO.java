@@ -1,9 +1,12 @@
 package com.cards.cards.dao;
 
+import java.math.BigDecimal;
+
 import lombok.Getter;
 
 @Getter
 public class TransferDTO {
-    private Integer user_id;
-    private Double amount;
+    private String number_from;
+    private String number_to;
+    private BigDecimal amount;
 }

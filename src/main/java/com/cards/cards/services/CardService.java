@@ -1,5 +1,6 @@
 package com.cards.cards.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,12 @@ public class CardService {
                 cardDTO.get().getNumber(), userService.getAuthUserId().get(), cardDTO.get().getExpire(),
                 cardDTO.get().getStatus(), cardDTO.get().getBalance()));
         return cardExceptions.InfoOk();
+    }
+
+    public Optional<List<AccountModel>> getAllCards() {
+        Optional<List<AccountModel>> allCards = _accountRepository.findAllByUser_id(userService.getAuthUserId().get());
+        if (allCards.isPresent())
+            return allCards;
+        return null;
     }
 }

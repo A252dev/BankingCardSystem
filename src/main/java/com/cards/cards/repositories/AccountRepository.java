@@ -1,6 +1,7 @@
 package com.cards.cards.repositories;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,7 @@ public interface AccountRepository extends JpaRepository<AccountModel, Integer> 
 
     @Query("SELECT a FROM AccountModel a WHERE a.user_id = :user_id")
     Optional<AccountModel> findFirstByUser_id(@Param("user_id") UserModel user_id);
+
+    @Query("SELECT a FROM AccountModel a WHERE a.user_id = :user_id")
+    Optional<List<AccountModel>> findAllByUser_id(@Param("user_id") UserModel user_id);
 }

@@ -30,7 +30,7 @@
             <column name="user_id" type="integer">
                 <constraints nullable="false" unique="true" />
             </column>
-            <column name="expire" type="varchar(12)">
+            <column name="expire" type="date">
                 <constraints nullable="false" unique="false" />
             </column>
             <column name="status" type="varchar(8)">

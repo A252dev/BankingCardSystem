@@ -10,7 +10,6 @@ import com.cards.cards.models.AccountModel.Status;
 @Getter
 @Setter
 public class CardDTO {
-
     private String number;
     private Date expire;
     private Status status;

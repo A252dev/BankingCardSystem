@@ -1,5 +1,3 @@
-FROM bitnami/postgresql:latest
+FROM postgres:17-alpine
 
-
-COPY database/init.sql /docker-entrypoint-initdb.d/
-RUN chown postgres:postgres /docker-entrypoint-initdb.d/init.sql
+ADD database/create.sql /docker-entrypoint-initdb.d/ 

@@ -1,6 +1,17 @@
 #!/bin/bash
+
 set -e
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRESQL_USER" <<-EOSQL
+echo "before"
+
+export PGUSER=postgres
+echo $PGUSER
+
+psql <<- EOSQL
+    CREATE DATABASE cabinet;
     GRANT ALL PRIVILEGES ON DATABASE cabinet TO postgres;
 EOSQL
+
+
+
+echo "after."

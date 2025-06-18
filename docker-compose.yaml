@@ -1,32 +1,30 @@
 services:
-  # cards:
-  #   # image: "openjdk:17-jdk-slim"
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8000:8080"
-  #   networks:
-  #     - app-connector
-  #   depends_on:
-  #     - postgresql
+  cards:
+    image: "openjdk:17-jdk-slim"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    networks:
+      - app-connector
+    depends_on:
+      - postgresql
 
   postgresql:
     image: "bitnami/postgresql:latest"
-    # build:
-    #   context: .
-    #   dockerfile: database/Dockerfile
+    build:
+      context: .
+      dockerfile: database/Dockerfile
     networks:
       - app-connector
     environment:
       - POSTGRESQL_HOST=127.0.0.1
       - POSTGRESQL_USER=postgres
       - POSTGRESQL_PASSWORD=password
-      - POSTGRESQL_DATABASE=cabinet
-    # volumes:
-    #   - ./database/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
-      - "1234:5432"
+      - "5432:5432"
 
 networks:
   app-connector:

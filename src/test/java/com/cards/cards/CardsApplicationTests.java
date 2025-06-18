@@ -1,5 +1,7 @@
 package com.cards.cards;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -8,5 +10,6 @@ class CardsApplicationTests {
 
 	@Test
 	void contextLoads() {
+		assertEquals(2, 1 + 1);
 	}
 }

@@ -57,6 +57,13 @@ public class AccountModel {
         this.balance = balance;
     }
 
+    // for the tests
+    public AccountModel(String number, BigDecimal balance, UserModel user_id) {
+        this.number = number;
+        this.balance = balance;
+        this.user_id = user_id;
+    }
+
     public enum Status {
         ACTIVE,
         BLOCKED,

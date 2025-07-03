@@ -1,22 +1,24 @@
-package com.cards.cards.services;
+package com.cards.cards.tasks;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import com.cards.cards.models.AccountModel;
 import com.cards.cards.repositories.AccountRepository;
 
 import lombok.AllArgsConstructor;
 
-@Service
+@Component
 @AllArgsConstructor
-public class QueueService {
+public class SheduledTasks {
 
     private final AccountRepository _accountRepository;
 
+    @Scheduled(fixedRate = 5000, initialDelay = 2000) // 5/2 seconds
     public void addUserBalance() {
 
         List<AccountModel> listUsers = _accountRepository.findAll();

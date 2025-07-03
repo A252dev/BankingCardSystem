@@ -1,4 +1,4 @@
-### banking-card-system
+# banking-card-system
 
-##### Database: PostgteSQL
-##### Swagger: /swagger-ui/index.html
+- Database: PostgreSQL
+- Swagger: /swagger-ui/index.html

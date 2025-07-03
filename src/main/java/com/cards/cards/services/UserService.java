@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.cards.cards.dao.SearchDAO;
@@ -43,7 +44,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserExceptions userExceptions;
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<Throwable> createUser(UserDTO user) {
         UserModel newUser = new UserModel(user.getName(), user.getDate(), user.getPassword());
         if (!_emailRepository.findByEmail(user.getEmail()).isEmpty()
@@ -58,7 +59,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<Throwable> deleteUser() {
         findUserId = this.getAuthUserId();
         if (findUserId.isPresent()) {
@@ -72,7 +73,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<Throwable> updateUser(UserDTO user) {
         findUserId = this.getAuthUserId();
         if (findUserId.isPresent()) {
